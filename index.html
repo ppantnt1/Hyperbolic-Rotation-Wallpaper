@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <canvas id="BOX" width="1920" height="1080" style="height: 1080px;width: 1920px;background-color: black;left:0px;top: 0%;position: absolute;" ></canvas>
+
+        <script src="./script.js"></script>
+        <script>
+            //set up&basic function v.alpha 1.1
+            //alpha 1.1 added:Float2
+            var cv=document.getElementById("BOX")
+            var ctx=cv.getContext("2d")
+            var cx;
+            var cy;
+
+            var cc=false;
+
+            //if the mouse is moved, update new cursor coordinate
+            document.onmousemove=function(e) {
+                cx = event.clientX/parseInt(cv.style.width)*2000-1000;
+                cy = event.clientY/parseInt(cv.style.height)*1125-562.5;
+                //console.log(cx,cy)
+            }
+            cv.addEventListener('mousedown',function(){
+                cc=true;
+            })
+            cv.addEventListener('mouseup',function(){
+                cc=false;
+            })
+            var speed=.001
+            var p18=Math.PI/180
+            //script
+            var lt=0
+            var fps=60
+            
+            var tick=0
+            var n=2
+            function clearScreen(){
+                ctx.clearRect(0,0,cv.width,cv.height)
+            }
+            function drawCircle(color,r,pos){
+                //console.log(1)
+                //console.log(arguments,pos)
+                //ctx.fillstyle=color
+                //ctx.arc(pos[0],pos[1],lw/2,0,2*Math.PI)
+                //ctx.arc(pos[pos.length-2],pos[pos.length-1],lw/2,0,2*Math.PI)
+                //ctx.fill()
+                ctx.beginPath()
+                ctx.lineWidth=1.5
+                ctx.strokeStyle=color
+                ctx.arc(pos[0]+960,pos[1]+540,r,0,2*Math.PI)
+                ctx.stroke()
+            }
+            function drawLine(color,lw,pos){
+                //console.log(arguments,pos)
+                //ctx.fillstyle=color
+                //ctx.arc(pos[0],pos[1],lw/2,0,2*Math.PI)
+                //ctx.arc(pos[pos.length-2],pos[pos.length-1],lw/2,0,2*Math.PI)
+                //ctx.fill()
+                ctx.beginPath()
+                ctx.strokeStyle=color
+                ctx.lineWidth=lw
+                ctx.moveTo(pos[0]+960,pos[1]+540)
+                
+                for(var x=2;x<pos.length;x+=2){
+                    ctx.lineTo(pos[x]+960,pos[x+1]+540)    
+                }
+                ctx.stroke()
+            }
+            /*var L=new Float2(20000,0)
+            var N=new Float2(10000,0)
+            //var B=new Float2(50,100000)
+            L.cdivide_by(N)
+            console.log(L)*/
+            setInterval(mainloop,1000/fps)
+        </script>
+   </body>
+</html>
