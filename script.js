@@ -1,5 +1,6 @@
 ele=[]
 shp=[]
+shp2=[]
 function drawShape(color,r,n,m,off,pos){
     ctx.beginPath()
     ctx.strokeStyle=color
@@ -17,15 +18,18 @@ for(var i=-150;i<=150;i++){
         ele.push([40*i+20*j,20*Math.sqrt(3)*j]);
         if(i==0&&j==0){
             shp.push(-1)
+            shp2.push(-1)
         }
         else{
             shp.push(Math.round((2*i+j)**2-3*j**2));
+            shp2.push((2*i+j)>Math.sqrt(3)*j);
         }
         //ele.push([100*i,100*j]);
     }
 }
 console.log(shp);
-var ht=0,ct=.25;
+var ht=0,ct=.25,rt=0;
+const rr=100;
 var s=7;
 var then=Date.now();
 window.onload=function(){
@@ -44,10 +48,12 @@ function mainloop2(){
         drawCircle("#FFF",10,ele[e]);
     }*/
     //console.log(dt);
-    ht+=.30*dt;
+    ht+=.3*dt;
     const hperiod=Math.asinh(Math.sqrt(3));
-    ct+=.01*dt;
-    const cperiod=-Math.PI;
+    ct+=.005*dt;
+    const cperiod=-2*Math.PI;
+    rt+=.02*dt;
+    const rperiod=2*Math.PI;
     if(ct>1){
         console.log("Resetted ct")
         ct-=1;
@@ -62,10 +68,11 @@ function mainloop2(){
                     Math.sinh(ht*hperiod)*tpos[0]+Math.cosh(ht*hperiod)*tpos[1]];
         tpos=[Math.cos(ct*cperiod)*tpos[0]-Math.sin(ct*cperiod)*tpos[1],
                     Math.sin(ct*cperiod)*tpos[0]+Math.cos(ct*cperiod)*tpos[1]];
+        tpos=[tpos[0]+rr*Math.cos(rt*rperiod),tpos[1]+rr*Math.sin(rt*rperiod)];
         if(Math.abs(tpos[0])>1100||Math.abs(tpos[1])>600)
             continue;
         if(shp[e]!=-1){
-            switch((s+Math.floor((shp[e]^(shp[e]*3)))%s)%s){
+            switch((s+Math.floor((shp[e]^(shp[e]*3)+shp2[e]))%s)%s){
                 case 0:
                     drawCircle("#F00",8,tpos);
                     break;
